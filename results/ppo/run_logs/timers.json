@@ -1,0 +1,47 @@
+{
+    "name": "root",
+    "metadata": {
+        "timer_format_version": "0.1.0",
+        "start_time_seconds": "1691588171",
+        "python_version": "3.9.12 (main, Apr  5 2022, 01:53:17) \n[Clang 12.0.0 ]",
+        "command_line_arguments": "/Users/paulleukefeld/Development/MobileGames/UnityTutorials/HunterAgent/hunterAgent/bin/mlagents-learn",
+        "mlagents_version": "0.30.0",
+        "mlagents_envs_version": "0.30.0",
+        "communication_protocol_version": "1.5.0",
+        "pytorch_version": "1.11.0",
+        "numpy_version": "1.21.2",
+        "end_time_seconds": "1691588176"
+    },
+    "total": 4.708098917999999,
+    "count": 1,
+    "self": 0.007484559999999085,
+    "children": {
+        "run_training.setup": {
+            "total": 0.06316999199999973,
+            "count": 1,
+            "self": 0.06316999199999973
+        },
+        "TrainerController.start_learning": {
+            "total": 4.637444366,
+            "count": 1,
+            "self": 0.0007860060000002278,
+            "children": {
+                "TrainerController._reset_env": {
+                    "total": 4.636631418,
+                    "count": 1,
+                    "self": 4.636631418
+                },
+                "trainer_threads": {
+                    "total": 2.786999999671025e-06,
+                    "count": 1,
+                    "self": 2.786999999671025e-06
+                },
+                "TrainerController._save_models": {
+                    "total": 2.4155000000192217e-05,
+                    "count": 1,
+                    "self": 2.4155000000192217e-05
+                }
+            }
+        }
+    }
+}
