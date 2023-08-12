@@ -13,13 +13,33 @@ public class HunterAgent : Agent
     public override void OnEpisodeBegin()
     {
         // Move the HunterAgent back to it's starting location
-        this.transform.localPosition = new Vector3(2, 1, 30);
+        this.transform.localPosition = new Vector3(2, 1, -17);
 
         // Reset the HunterAgent's rotation
         this.transform.localRotation = Quaternion.identity;
 
-        // Move the AnimalAgent back to it's starting location
-        animalAgent.localPosition = new Vector3(5, 1, 63);
+        // Move the AnimalAgent back to a random starting location
+        bool validPosition = false;
+        Vector3 animalPosition = Vector3.zero;
+        int tries = 0;
+        while (!validPosition && tries < 10)
+        {
+            // Generate a random position within a certain range
+            animalPosition = new Vector3(Random.Range(-20f, 20f), 1, Random.Range(-20f, 20f));
+
+            // Check if there are any colliders within a certain radius of the position
+            Collider[] colliders = Physics.OverlapSphere(animalPosition, 1f);
+
+            // Check if the position is valid
+            validPosition = colliders.Length == 0;
+
+            // Increment the number of tries
+            tries++;
+        }
+
+        // Set the position of the AnimalAgent to the valid position
+        animalAgent.localPosition = animalPosition;
+    
     }
 
     public override void CollectObservations(VectorSensor sensor)
@@ -39,6 +59,7 @@ public class HunterAgent : Agent
         // HunterAgent fell off the platform
         if (this.transform.localPosition.y < 0)
         {
+            SetReward(-1f);
             EndEpisode();
         }
     }
