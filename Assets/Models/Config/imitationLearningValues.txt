@@ -1,0 +1,6 @@
+      gail:
+        strength: 0.5
+        demo_path: Models/ImitationModels/HunterAgentImitation.demo
+    behavioral_cloning:
+      strength: 0.5
+      demo_path: Models/ImitationModels/HunterAgentImitation.demo
