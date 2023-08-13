@@ -8,38 +8,27 @@ using Unity.MLAgents.Actuators;
 public class HunterAgent : Agent
 {
     [SerializeField] private Transform animalAgent;
+    [SerializeField] private Transform armory;
     [SerializeField] private float moveSpeed = 6f;
+    [SerializeField] private Material hunterAgentMaterial;
+    private bool hasSword = false;
 
     public override void OnEpisodeBegin()
     {
         // Move the HunterAgent back to it's starting location
-        this.transform.localPosition = new Vector3(2, 1, -17);
+        this.transform.localPosition = new Vector3(0, 1, -5);
 
         // Reset the HunterAgent's rotation
         this.transform.localRotation = Quaternion.identity;
 
-        // Move the AnimalAgent back to a random starting location
-        bool validPosition = false;
-        Vector3 animalPosition = Vector3.zero;
-        int tries = 0;
-        while (!validPosition && tries < 10)
-        {
-            // Generate a random position within a certain range
-            animalPosition = new Vector3(Random.Range(-20f, 20f), 1, Random.Range(-20f, 20f));
+        // Move the AnimalAgent back to it's starting location
+        animalAgent.localPosition = new Vector3(0, 1, 5);
 
-            // Check if there are any colliders within a certain radius of the position
-            Collider[] colliders = Physics.OverlapSphere(animalPosition, 1f);
+        // Reset the HunterAgent's sword status
+        hasSword = false;
 
-            // Check if the position is valid
-            validPosition = colliders.Length == 0;
-
-            // Increment the number of tries
-            tries++;
-        }
-
-        // Set the position of the AnimalAgent to the valid position
-        animalAgent.localPosition = animalPosition;
-    
+        // Reset the HunterAgent's material color
+        this.GetComponent<MeshRenderer>().material = hunterAgentMaterial;
     }
 
     public override void CollectObservations(VectorSensor sensor)
@@ -47,6 +36,9 @@ public class HunterAgent : Agent
         // HunterAgent and AnimalAgent positions
         sensor.AddObservation(animalAgent.localPosition);
         sensor.AddObservation(this.transform.localPosition);
+
+        // Armory position
+        sensor.AddObservation(armory.localPosition);
     }
 
     public override void OnActionReceived(ActionBuffers action)
@@ -71,12 +63,28 @@ public class HunterAgent : Agent
         continuousActionsOut[1] = Input.GetAxis("Vertical");
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnCollisionEnter(Collision collision)
     {
-        if (other.TryGetComponent<AnimalAgent>(out AnimalAgent animalAgentComponent))
+        if (collision.gameObject.CompareTag("AnimalAgent"))
         {
+            if (hasSword)
+            {
+                SetReward(+1f);
+                EndEpisode();
+            }
+            else
+            {
+                SetReward(-1f);
+                EndEpisode();
+            }
+        }
+
+        else if (collision.gameObject.CompareTag("Armory"))
+        {
+            hasSword = true;
+            // Change the color of the agent to red to indicate that it has a sword
+            this.GetComponent<MeshRenderer>().material.color = Color.red;
             SetReward(+1f);
-            EndEpisode();
         }
     }
 }
