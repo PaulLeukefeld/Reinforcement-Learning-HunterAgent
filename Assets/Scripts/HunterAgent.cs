@@ -8,45 +8,57 @@ using Unity.MLAgents.Actuators;
 public class HunterAgent : Agent
 {
     [SerializeField] private Transform animalAgent;
+    [SerializeField] private Transform armory;
     [SerializeField] private float moveSpeed = 6f;
+    [SerializeField] private Material hunterAgentMaterial;
+    [SerializeField] private float minRange = -20f;
+    [SerializeField] private float maxRange = 20f;
+
+    private bool hasSword = false;
+    private bool swordInArmory = true;
 
     public override void OnEpisodeBegin()
     {
         // Move the HunterAgent back to it's starting location
-        this.transform.localPosition = new Vector3(2, 1, -17);
+        this.transform.localPosition = new Vector3(0, 1, -5);
 
         // Reset the HunterAgent's rotation
         this.transform.localRotation = Quaternion.identity;
 
         // Move the AnimalAgent back to a random starting location
-        bool validPosition = false;
-        Vector3 animalPosition = Vector3.zero;
-        int tries = 0;
-        while (!validPosition && tries < 10)
+        Vector3 animalAgentPosition = new Vector3(Random.Range(minRange, maxRange), 1, Random.Range(minRange, maxRange));
+        while (Vector3.Distance(animalAgentPosition, armory.localPosition) < 2f)
         {
-            // Generate a random position within a certain range
-            animalPosition = new Vector3(Random.Range(-20f, 20f), 1, Random.Range(-20f, 20f));
-
-            // Check if there are any colliders within a certain radius of the position
-            Collider[] colliders = Physics.OverlapSphere(animalPosition, 1f);
-
-            // Check if the position is valid
-            validPosition = colliders.Length == 0;
-
-            // Increment the number of tries
-            tries++;
+            animalAgentPosition = new Vector3(Random.Range(minRange, maxRange), 1, Random.Range(minRange, maxRange));
         }
+        animalAgent.localPosition = animalAgentPosition;
 
-        // Set the position of the AnimalAgent to the valid position
-        animalAgent.localPosition = animalPosition;
-    
+        // Move the Armory back to a random starting location
+        Vector3 armoryPosition = new Vector3(Random.Range(minRange, maxRange), 1.5f, Random.Range(minRange, maxRange));
+        while (Vector3.Distance(armoryPosition, animalAgent.localPosition) < 2f)
+        {
+            armoryPosition = new Vector3(Random.Range(minRange, maxRange), 1.5f, Random.Range(minRange, maxRange));
+        }
+        armory.localPosition = armoryPosition;
+
+        // Reset the HunterAgent's & armory's sword status
+        hasSword = false;
+        swordInArmory = true;
+
+        // Reset the HunterAgent's material color
+        this.GetComponent<MeshRenderer>().material = hunterAgentMaterial;
     }
-
     public override void CollectObservations(VectorSensor sensor)
     {
         // HunterAgent and AnimalAgent positions
         sensor.AddObservation(animalAgent.localPosition);
         sensor.AddObservation(this.transform.localPosition);
+
+        // Armory position
+        sensor.AddObservation(armory.localPosition);
+
+        // HunterAgent sword observation
+        sensor.AddObservation(hasSword);
     }
 
     public override void OnActionReceived(ActionBuffers action)
@@ -62,6 +74,8 @@ public class HunterAgent : Agent
             SetReward(-1f);
             EndEpisode();
         }
+
+        AddReward(-1f / this.MaxStep);
     }
 
     public override void Heuristic(in ActionBuffers actionsOut)
@@ -71,12 +85,32 @@ public class HunterAgent : Agent
         continuousActionsOut[1] = Input.GetAxis("Vertical");
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnCollisionEnter(Collision collision)
     {
-        if (other.TryGetComponent<AnimalAgent>(out AnimalAgent animalAgentComponent))
+        if (collision.gameObject.CompareTag("AnimalAgent"))
         {
-            SetReward(+1f);
-            EndEpisode();
+            if (hasSword)
+            {
+                SetReward(+1f);
+                EndEpisode();
+            }
+            else
+            {
+                SetReward(-1f);
+                EndEpisode();
+            }
+        }
+
+        else if (collision.gameObject.CompareTag("Armory"))
+        {
+            if (swordInArmory)
+            {
+                hasSword = true;
+                swordInArmory = false;
+                // Change the color of the agent to red to indicate that it has a sword
+                this.GetComponent<MeshRenderer>().material.color = Color.red;
+                SetReward(+1f);
+            }
         }
     }
 }
