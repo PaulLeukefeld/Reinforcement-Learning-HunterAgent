@@ -1,0 +1,29 @@
+{
+    "HunterAgent": {
+        "checkpoints": [
+            {
+                "steps": 400002,
+                "file_path": "results/HunterAgentv2.6/HunterAgent/HunterAgent-400002.onnx",
+                "reward": 1.0,
+                "creation_time": 1692320856.639327,
+                "auxillary_file_paths": [
+                    "results/HunterAgentv2.6/HunterAgent/HunterAgent-400002.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 400002,
+            "file_path": "results/HunterAgentv2.6/HunterAgent.onnx",
+            "reward": 1.0,
+            "creation_time": 1692320856.639327,
+            "auxillary_file_paths": [
+                "results/HunterAgentv2.6/HunterAgent/HunterAgent-400002.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.30.0",
+        "torch_version": "1.11.0"
+    }
+}

@@ -11,7 +11,11 @@ public class HunterAgent : Agent
     [SerializeField] private Transform armory;
     [SerializeField] private float moveSpeed = 6f;
     [SerializeField] private Material hunterAgentMaterial;
+    [SerializeField] private float minRange = -20f;
+    [SerializeField] private float maxRange = 20f;
+
     private bool hasSword = false;
+    private bool swordInArmory = true;
 
     public override void OnEpisodeBegin()
     {
@@ -21,16 +25,29 @@ public class HunterAgent : Agent
         // Reset the HunterAgent's rotation
         this.transform.localRotation = Quaternion.identity;
 
-        // Move the AnimalAgent back to it's starting location
-        animalAgent.localPosition = new Vector3(0, 1, 5);
+        // Move the AnimalAgent back to a random starting location
+        Vector3 animalAgentPosition = new Vector3(Random.Range(minRange, maxRange), 1, Random.Range(minRange, maxRange));
+        while (Vector3.Distance(animalAgentPosition, armory.localPosition) < 2f)
+        {
+            animalAgentPosition = new Vector3(Random.Range(minRange, maxRange), 1, Random.Range(minRange, maxRange));
+        }
+        animalAgent.localPosition = animalAgentPosition;
 
-        // Reset the HunterAgent's sword status
+        // Move the Armory back to a random starting location
+        Vector3 armoryPosition = new Vector3(Random.Range(minRange, maxRange), 1.5f, Random.Range(minRange, maxRange));
+        while (Vector3.Distance(armoryPosition, animalAgent.localPosition) < 2f)
+        {
+            armoryPosition = new Vector3(Random.Range(minRange, maxRange), 1.5f, Random.Range(minRange, maxRange));
+        }
+        armory.localPosition = armoryPosition;
+
+        // Reset the HunterAgent's & armory's sword status
         hasSword = false;
+        swordInArmory = true;
 
         // Reset the HunterAgent's material color
         this.GetComponent<MeshRenderer>().material = hunterAgentMaterial;
     }
-
     public override void CollectObservations(VectorSensor sensor)
     {
         // HunterAgent and AnimalAgent positions
@@ -39,6 +56,9 @@ public class HunterAgent : Agent
 
         // Armory position
         sensor.AddObservation(armory.localPosition);
+
+        // HunterAgent sword observation
+        sensor.AddObservation(hasSword);
     }
 
     public override void OnActionReceived(ActionBuffers action)
@@ -54,6 +74,8 @@ public class HunterAgent : Agent
             SetReward(-1f);
             EndEpisode();
         }
+
+        AddReward(-1f / this.MaxStep);
     }
 
     public override void Heuristic(in ActionBuffers actionsOut)
@@ -81,10 +103,14 @@ public class HunterAgent : Agent
 
         else if (collision.gameObject.CompareTag("Armory"))
         {
-            hasSword = true;
-            // Change the color of the agent to red to indicate that it has a sword
-            this.GetComponent<MeshRenderer>().material.color = Color.red;
-            SetReward(+1f);
+            if (swordInArmory)
+            {
+                hasSword = true;
+                swordInArmory = false;
+                // Change the color of the agent to red to indicate that it has a sword
+                this.GetComponent<MeshRenderer>().material.color = Color.red;
+                SetReward(+1f);
+            }
         }
     }
 }

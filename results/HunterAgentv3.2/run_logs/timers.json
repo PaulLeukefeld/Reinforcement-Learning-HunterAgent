@@ -1,0 +1,54 @@
+{
+    "name": "root",
+    "metadata": {
+        "timer_format_version": "0.1.0",
+        "start_time_seconds": "1692409559",
+        "python_version": "3.9.12 (main, Apr  5 2022, 01:53:17) \n[Clang 12.0.0 ]",
+        "command_line_arguments": "/Users/paulleukefeld/Development/MobileGames/UnityTutorials/HunterAgent/hunterAgent/bin/mlagents-learn Assets/Models/Config/HunterAgent.yaml --run-id=HunterAgentv3.2 --resume",
+        "mlagents_version": "0.30.0",
+        "mlagents_envs_version": "0.30.0",
+        "communication_protocol_version": "1.5.0",
+        "pytorch_version": "1.11.0",
+        "numpy_version": "1.21.2",
+        "end_time_seconds": "1692409566"
+    },
+    "total": 7.657977043000001,
+    "count": 1,
+    "self": 0.00899015500000111,
+    "children": {
+        "run_training.setup": {
+            "total": 0.035394045000000096,
+            "count": 1,
+            "self": 0.035394045000000096
+        },
+        "TrainerController.start_learning": {
+            "total": 7.613592842999999,
+            "count": 1,
+            "self": 0.00011865999999915999,
+            "children": {
+                "TrainerController._reset_env": {
+                    "total": 7.52625352,
+                    "count": 1,
+                    "self": 7.52625352
+                },
+                "trainer_threads": {
+                    "total": 1.1159999999676984e-06,
+                    "count": 1,
+                    "self": 1.1159999999676984e-06
+                },
+                "TrainerController._save_models": {
+                    "total": 0.08721954700000012,
+                    "count": 1,
+                    "self": 0.0004954189999999414,
+                    "children": {
+                        "RLTrainer._checkpoint": {
+                            "total": 0.08672412800000018,
+                            "count": 1,
+                            "self": 0.08672412800000018
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
