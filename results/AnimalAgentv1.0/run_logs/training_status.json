@@ -1,0 +1,38 @@
+{
+    "AnimalAgent": {
+        "checkpoints": [
+            {
+                "steps": 499949,
+                "file_path": "results/AnimalAgentv1.0/AnimalAgent/AnimalAgent-499949.onnx",
+                "reward": null,
+                "creation_time": 1692418574.456977,
+                "auxillary_file_paths": [
+                    "results/AnimalAgentv1.0/AnimalAgent/AnimalAgent-499949.pt"
+                ]
+            },
+            {
+                "steps": 800045,
+                "file_path": "results/AnimalAgentv1.0/AnimalAgent/AnimalAgent-800045.onnx",
+                "reward": 0.0,
+                "creation_time": 1692419048.041866,
+                "auxillary_file_paths": [
+                    "results/AnimalAgentv1.0/AnimalAgent/AnimalAgent-800045.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 800045,
+            "file_path": "results/AnimalAgentv1.0/AnimalAgent.onnx",
+            "reward": 0.0,
+            "creation_time": 1692419048.041866,
+            "auxillary_file_paths": [
+                "results/AnimalAgentv1.0/AnimalAgent/AnimalAgent-800045.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.30.0",
+        "torch_version": "1.11.0"
+    }
+}
