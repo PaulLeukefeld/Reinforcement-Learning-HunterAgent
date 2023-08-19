@@ -13,6 +13,13 @@ public class HunterAgent : Agent
     [SerializeField] private Material hunterAgentMaterial;
     [SerializeField] private float minRange = -20f;
     [SerializeField] private float maxRange = 20f;
+    [SerializeField] private Transform[] agents = new Transform[2];
+
+    private void Start()
+    {
+        agents[0] = animalAgent;
+        agents[1] = this.transform;
+    }
 
     private bool hasSword = false;
     private bool swordInArmory = true;
@@ -24,14 +31,6 @@ public class HunterAgent : Agent
 
         // Reset the HunterAgent's rotation
         this.transform.localRotation = Quaternion.identity;
-
-        // Move the AnimalAgent back to a random starting location
-        Vector3 animalAgentPosition = new Vector3(Random.Range(minRange, maxRange), 1, Random.Range(minRange, maxRange));
-        while (Vector3.Distance(animalAgentPosition, armory.localPosition) < 2f)
-        {
-            animalAgentPosition = new Vector3(Random.Range(minRange, maxRange), 1, Random.Range(minRange, maxRange));
-        }
-        animalAgent.localPosition = animalAgentPosition;
 
         // Move the Armory back to a random starting location
         Vector3 armoryPosition = new Vector3(Random.Range(minRange, maxRange), 1.5f, Random.Range(minRange, maxRange));
@@ -72,7 +71,11 @@ public class HunterAgent : Agent
         if (this.transform.localPosition.y < 0)
         {
             SetReward(-1f);
-            EndEpisode();
+            // End the episode for all agents
+            foreach (var agent in agents)
+            {
+                agent.GetComponent<Agent>().EndEpisode();
+            }
         }
 
         AddReward(-1f / this.MaxStep);
@@ -92,12 +95,20 @@ public class HunterAgent : Agent
             if (hasSword)
             {
                 SetReward(+1f);
-                EndEpisode();
+                // End the episode for all agents
+                foreach (var agent in agents)
+                {
+                    agent.GetComponent<Agent>().EndEpisode();
+                }
             }
             else
             {
                 SetReward(-1f);
-                EndEpisode();
+                // End the episode for all agents
+                foreach (var agent in agents)
+                {
+                    agent.GetComponent<Agent>().EndEpisode();
+                }
             }
         }
 
@@ -112,5 +123,10 @@ public class HunterAgent : Agent
                 SetReward(+1f);
             }
         }
+    }
+
+    public bool GetHunterAgentSwordStatus()
+    {
+        return hasSword;
     }
 }
