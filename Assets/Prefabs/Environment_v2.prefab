@@ -238,7 +238,7 @@ MonoBehaviour:
     hasUpgradedBrainParametersWithActionSpec: 1
   m_Model: {fileID: 5022602860645237092, guid: 9550d6ae189de49848c71e393dcbe1c5, type: 3}
   m_InferenceDevice: 0
-  m_BehaviorType: 0
+  m_BehaviorType: 2
   m_BehaviorName: AnimalAgent
   TeamId: 0
   m_UseChildSensors: 1
@@ -570,7 +570,7 @@ MonoBehaviour:
     hasUpgradedBrainParametersWithActionSpec: 1
   m_Model: {fileID: 5022602860645237092, guid: 60cd831d634fd4c6fa9e00b443a71fde, type: 3}
   m_InferenceDevice: 0
-  m_BehaviorType: 0
+  m_BehaviorType: 2
   m_BehaviorName: HunterAgent
   TeamId: 0
   m_UseChildSensors: 1

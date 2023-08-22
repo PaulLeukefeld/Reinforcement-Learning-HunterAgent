@@ -76,3 +76,6 @@ crashlytics-build.properties
 
 # Virtual environments
 hunterAgent/
+
+# Build folders
+WebGL_Build/
