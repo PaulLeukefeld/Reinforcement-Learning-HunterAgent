@@ -31,7 +31,7 @@ Before you dive into the project, make sure you have the necessary tools and dep
 
 ## Installation
 
-1. Clone the repository: `git clone https://github.com/PaulLeukefeld/HunterAgent`
+1. Clone the repository: `git clone https://github.com/PaulLeukefeld/Reinforcement-Learning-HunterAgent`
 2. Install Unity: Download and install [Unity Hub](https://unity.com/), then add the project to Unity Hub.
 3. Set up Python environment: Follow the [ML-Agents Installation Guide](https://github.com/Unity-Technologies/ml-agents/blob/main/docs/Installation.md) to create the required Python environment.
 
